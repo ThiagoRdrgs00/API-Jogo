@@ -3,9 +3,15 @@ package br.com.senai.Service;
 import br.com.senai.Entity.Endereco;
 import br.com.senai.Exception.EntityException;
 import br.com.senai.Repository.EnderecoRepository;
+import br.com.senai.dto.EnderecoViaCepDTO;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 @Service
@@ -56,6 +62,37 @@ public class EnderecoService {
         enderecoOld.setEstado(endereco.getEstado());
 
         return enderecoRepository.save(enderecoOld);
+    }
+
+    public EnderecoViaCepDTO buscarEnderecoViaCep(String cep) {
+        final String apiSrc = "http://viacep.com.br/ws/";
+        final int statusOK = 200;
+
+        try {
+            URL url = new URL(apiSrc + cep + "/json");
+            //URL url = new URL("http://viacep.com.br/ws/" + cep + "/json");
+            HttpURLConnection conexao = (HttpURLConnection) url.openConnection();
+
+            if (conexao.getResponseCode() != statusOK) {
+                throw new RuntimeException("HTTP connection error! ("+ conexao.getResponseCode() +")");
+            }
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
+
+            String response , jsonViaCep = "";
+            while ((response = bufferedReader.readLine()) != null) {
+                jsonViaCep += response;
+            }
+
+            Gson gson = new Gson();
+            EnderecoViaCepDTO endereco = gson.fromJson(jsonViaCep, EnderecoViaCepDTO.class);
+
+            return endereco;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 }

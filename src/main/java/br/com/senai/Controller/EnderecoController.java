@@ -2,6 +2,7 @@ package br.com.senai.Controller;
 
 import br.com.senai.Entity.Endereco;
 import br.com.senai.Service.EnderecoService;
+import br.com.senai.dto.EnderecoViaCepDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
@@ -56,5 +57,9 @@ public class EnderecoController {
         return enderecoService.editarEndereco(id, endereco);
     }
 
+    @GetMapping("/viacep/{cep}")
+    public EnderecoViaCepDTO buscarEnderecoViaCep(@PathVariable String cep) {
+        return enderecoService.buscarEnderecoViaCep(cep);
+    }
 
 }
