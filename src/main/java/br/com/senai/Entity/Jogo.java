@@ -8,22 +8,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Endereco {
-
+public class Jogo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    private String cep;
-    private String rua;
-    private String bairro;
-    private String cidade;
-    private String uf;
-    private String estado;
+    private Long id;
+    private String nome;
+    private String genero;
+    private String desenvolvedora;
+    private Date data_publicacao;
 }
